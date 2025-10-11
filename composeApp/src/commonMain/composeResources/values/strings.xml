@@ -2,4 +2,8 @@
 <resources>
     <string name="search_hint">Search...</string>
     <string name="close_hint">Clear search</string>
+    <string name="search_results">Search Results</string>
+    <string name="favorites">Favorites</string>
+    <string name="no_search_results">We couldn't find any results for your search</string>
+    <string name="no_favorites">You haven't saved a book as favorite yet</string>
 </resources>

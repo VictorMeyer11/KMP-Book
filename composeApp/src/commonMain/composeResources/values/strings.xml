@@ -6,4 +6,10 @@
     <string name="favorites">Favorites</string>
     <string name="no_search_results">We couldn't find any results for your search</string>
     <string name="no_favorites">You haven't saved a book as favorite yet</string>
+    <string name="error_disk_full">It seems like your disk is full.</string>
+    <string name="error_unknown">Something went wrong.</string>
+    <string name="error_request_timeout">Your request timed out.</string>
+    <string name="error_no_internet">You've lost your connection.</string>
+    <string name="error_too_many_requests">Your quota seems to have been exceeded.</string>
+    <string name="error_serialization">Couldn't parse data.</string>
 </resources>

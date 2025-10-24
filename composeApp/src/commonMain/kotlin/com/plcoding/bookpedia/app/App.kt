@@ -16,6 +16,9 @@ import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navigation
 import androidx.navigation.toRoute
 import com.plcoding.bookpedia.book.presentation.SelectedBookViewModel
+import com.plcoding.bookpedia.book.presentation.book_details.BookDetailsAction
+import com.plcoding.bookpedia.book.presentation.book_details.BookDetailsScreenRoot
+import com.plcoding.bookpedia.book.presentation.book_details.BookDetailsViewModel
 import com.plcoding.bookpedia.book.presentation.book_list.BookListScreenRoot
 import com.plcoding.bookpedia.book.presentation.book_list.BookListViewModel
 import org.jetbrains.compose.ui.tooling.preview.Preview
@@ -50,13 +53,25 @@ fun App() {
                     )
                 }
                 composable<Route.BookDetails> {
+                    val viewModel = koinViewModel<BookDetailsViewModel>()
                     val selectedBookViewModel =
                         it.sharedKoinViewModel<SelectedBookViewModel>(navController)
                     val selectedBook by selectedBookViewModel.selectedBook.collectAsStateWithLifecycle()
 
-                    LaunchedEffect(true) {
-                        selectedBookViewModel.onSelectBook(null)
+                    LaunchedEffect(selectedBook) {
+                        selectedBook?.let {
+                            viewModel.onAction(
+                                BookDetailsAction.OnSelectedBookChange(it)
+                            )
+                        }
                     }
+
+                    BookDetailsScreenRoot(
+                        viewModel = viewModel,
+                        onBackClick = {
+                            navController.navigateUp()
+                        }
+                    )
                 }
             }
         }

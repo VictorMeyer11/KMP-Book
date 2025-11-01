@@ -21,17 +21,20 @@ import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
+@OptIn(FlowPreview::class)
 class BookListViewModel(
     private val bookRepository: BookRepository
 ): ViewModel() {
     private var cachedBooks = emptyList<Book>()
     private var searchJob: Job? = null
+    private var observeFavoritesJob: Job? = null
     private val _state = MutableStateFlow(BookListState())
     val state = _state
         .onStart {
             if(cachedBooks.isEmpty()) {
                 observeSearchQuery()
             }
+            observeFavoriteBooks()
         }
         .stateIn(
             viewModelScope,
@@ -57,7 +60,17 @@ class BookListViewModel(
         }
     }
 
-    @OptIn(FlowPreview::class)
+    private fun observeFavoriteBooks() {
+        observeFavoritesJob?.cancel()
+        observeFavoritesJob = bookRepository
+            .getFavoriteBooks()
+            .onEach { favoriteBooks ->
+                _state.update {
+                    it.copy(favoriteBooks = favoriteBooks)
+                }
+            }.launchIn(viewModelScope)
+    }
+
     private fun observeSearchQuery() {
         state
             .map { it.searchQuery }
